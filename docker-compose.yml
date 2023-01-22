@@ -1,0 +1,17 @@
+# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+
+version: '3'
+
+# Define services
+services:
+
+  # App Service
+  app:
+    # Configuration for building the docker image for the service
+    build:
+      context: . # Use an image built from the specified dockerfile in the current directory.
+      dockerfile: app.Dockerfile
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    restart: unless-stopped
