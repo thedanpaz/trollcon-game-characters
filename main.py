@@ -30,7 +30,6 @@ def createCharacterSheet(characterName, characterClass, characterLevel):
 
     return character
 
-
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
@@ -48,24 +47,51 @@ if __name__ == '__main__':
 
     characterList = []
     try:
-        characterList.append(createCharacterSheet('jarg', 'Scoundrel', 69))
-        characterList.append(createCharacterSheet('Dunbar', 'Brute', 17))
-        characterList.append(createCharacterSheet('Dunbar', 'DickButt', 12))
+
+        continueCharacterBuilding = True
+
+        while continueCharacterBuilding:
+            try:
+
+                # User inputs
+                characterNameString = input("Character name? ")
+                characterClassString = input("Character class? ")
+
+                # Check that the Character Class is Valid
+                if not (characterClassString.lower() in CHARACTER_TYPES):
+                    str = " "
+                    raise Exception("Character Class: " + characterClassString + " is not valid. Must be of type: " + str.join(
+                        CHARACTER_TYPES))
+                    print("")
+
+                characterLevelNum = input("Character level? ")
+
+                # Build Characters
+                characterList.append(createCharacterSheet(characterNameString, characterClassString, int(characterLevelNum)))
+
+            except Exception as error:
+                print(error)
+
+            # Ask user if they wish to continue
+            continueBuildingString = input("Continue creating characters? y/n ")
+            print("")
+            if not continueBuildingString.lower() == 'y':
+                continueCharacterBuilding = False
+
     except Exception as error:
         print(error)
 
     rowNumber = 1
 
     # Start appending Character info to spreadsheet
-    for character in characterList:
-        print(character)
-        rowNumber = rowNumber + 1
-        # Traits
-        ws['A' + str(rowNumber)] = character["name"]
-        ws['B' + str(rowNumber)] = character["class"]
-        ws['C' + str(rowNumber)] = character["level"]
-        ws['D' + str(rowNumber)] = character["health"]
-        ws['E' + str(rowNumber)] = character["strength"]
-        ws['F' + str(rowNumber)] = character["dexterity"]
+    for playerCharacter in characterList:
+        rowNumber += 1
+        # Trait
+        ws['A' + rowNumber.__str__()] = playerCharacter["name"]
+        ws['B' + rowNumber.__str__()] = playerCharacter["class"]
+        ws['C' + rowNumber.__str__()] = playerCharacter["level"]
+        ws['D' + rowNumber.__str__()] = playerCharacter["health"]
+        ws['E' + rowNumber.__str__()] = playerCharacter["strength"]
+        ws['F' + rowNumber.__str__()] = playerCharacter["dexterity"]
 
     wb.save('/var/www/Character-Sheet.xlsx')
